@@ -1,0 +1,41 @@
+name: Work package
+description: Propose or approve a WP/RWP
+title: "[WP/RWP] "
+body:
+  - type: input
+    id: id
+    attributes:
+      label: WP/RWP ID
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Execution mode
+      options:
+        - Sequential
+        - Collaborative
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and exclusions
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies and queue position
+  - type: textarea
+    id: validation
+    attributes:
+      label: Affected-area validation
+    validations:
+      required: true

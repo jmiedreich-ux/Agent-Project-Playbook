@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "activeClaims": [],
+  "claimFields": {
+    "workItem": "WP-00.00 or RWP-00.00",
+    "issue": "GitHub issue number",
+    "owner": "agent or person",
+    "mode": "Sequential or Collaborative",
+    "branch": "wp/... or rwp/...",
+    "claimedAt": "ISO-8601 timestamp",
+    "lanes": []
+  }
+}

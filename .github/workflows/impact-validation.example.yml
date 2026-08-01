@@ -1,0 +1,66 @@
+name: Impact Validation Example
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      full_validation:
+        description: Run full non-integration validation
+        type: boolean
+        default: false
+
+concurrency:
+  group: impact-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  classify:
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.paths.outputs.docs_only }}
+      full: ${{ steps.paths.outputs.full }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: paths
+        shell: bash
+        run: |
+          echo "Replace this step with repository-specific path classification."
+          echo "docs_only=false" >> "$GITHUB_OUTPUT"
+          echo "full=${{ inputs.full_validation || false }}" >> "$GITHUB_OUTPUT"
+
+  affected:
+    needs: classify
+    if: needs.classify.outputs.docs_only != 'true' && needs.classify.outputs.full != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Run only affected builds and affected non-integration unit tests."
+
+  docs:
+    needs: classify
+    if: needs.classify.outputs.docs_only == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Run lightweight documentation and repository-record validation."
+
+  full:
+    needs: classify
+    if: needs.classify.outputs.full == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Run the full non-integration regression suite."
+
+  build-and-test:
+    if: always()
+    needs: [classify, affected, docs, full]
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          test "${{ needs.classify.result }}" = "success"
+          test "${{ needs.affected.result }}" != "failure"
+          test "${{ needs.docs.result }}" != "failure"
+          test "${{ needs.full.result }}" != "failure"

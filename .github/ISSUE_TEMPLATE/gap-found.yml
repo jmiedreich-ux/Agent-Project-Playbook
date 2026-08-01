@@ -1,0 +1,34 @@
+name: Gap found
+description: Record a testing, review, or implementation finding before planning classification
+title: "[Gap] "
+labels: ["gap-found"]
+body:
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and reproduction
+    validations:
+      required: true
+  - type: input
+    id: phase
+    attributes:
+      label: Affected phase or package
+  - type: textarea
+    id: impact
+    attributes:
+      label: User, architecture, security, or migration impact
+  - type: markdown
+    attributes:
+      value: "Testing and review agents stop here. Only planning may promote this issue to an RWP or change queue priority."
